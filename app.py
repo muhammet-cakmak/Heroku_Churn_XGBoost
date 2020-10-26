@@ -59,7 +59,7 @@ def predict():
     
     form_data = request.form.to_dict()
     
-    df_input = pd.DataFrame.from_records(form_data)
+    df_input = pd.DataFrame.from_records([form_data])
     #df_input = df_input.drop(['submitBtn'], axis=1)
     df_input = pd.DataFrame(df_input)
     
