@@ -55,10 +55,9 @@ def home():
 def predict():
     
     
-    int_features = [x for x in request.form.values()]
-    form_data = [np.array(int_features)]
     
-    #form_data = request.form.to_dict()
+    
+    form_data = request.form.to_dict()
     
     df_input = pd.DataFrame.from_records(form_data)
     #df_input = df_input.drop(['submitBtn'], axis=1)
@@ -88,16 +87,8 @@ def predict():
         
         return render_template('index.html', predicted_value="The customer's churn status is {}.  It may not be risky to give  the credit to the customer".format(x))
 
-@app.route('/predict_api',methods=['POST'])
-def predict_api():
-    '''
-    For direct API calls trought request
-    '''
-    data = request.get_json(force=True)
-    prediction = model.predict([np.array(list(data.values()))])
 
-    output = prediction[0]
-    return jsonify(output)
+    
 
     
 
