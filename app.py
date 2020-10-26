@@ -84,13 +84,42 @@ def predict():
     x = pred
     if x == 1:
         
-        return render_template('index.html', predicted_value="The customer's churn status is {}.  It can be risky to give  the credit to the customer.".format(jsonify(X)))
+        return render_template('index.html', predicted_value="The customer's churn status is {}.  It can be risky to give  the credit to the customer.".format(x))
     else:
-        return render_template('index.html', predicted_value="The customer's churn status is {}.  It may not be risky to give  the credit to the customer".format(jsonify(X)))
+        return render_template('index.html', predicted_value="The customer's churn status is {}.  It may not be risky to give  the credit to the customer".format(x))
 
     
+@app.route('/predict_api',methods=['POST'])
+def predict_api():
+    '''
+    For direct API calls trought request
+    '''
+    data = request.get_json(force=True)
+    
+    form_data1 = np.array(list(data.values()))
+    
+    df_input = pd.DataFrame.from_records(form_data1)
+    #df_input = df_input.drop(['submitBtn'], axis=1)
+    df_input = pd.DataFrame(df_input)
+    
+    sample_df = pd.DataFrame(columns = main_cols)
+    clean_df = clean_data(df_input)
+    main_df = sample_df.append(clean_df,sort=False)
+    main_df = main_df.fillna(0)
+   
+    std_df = main_df.copy()
 
+    
+    std_df = std_df.astype(float)
 
+    
+    clf = pickle.load(open('model.pkl', 'rb'))
+    pred = clf.predict(std_df)
+    x = pred
+    
+    
+
+    return jsonify(x)
     
 
     
