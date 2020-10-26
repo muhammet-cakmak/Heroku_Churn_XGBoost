@@ -84,10 +84,11 @@ def predict():
     x = pred
     if x == 1:
         
-        return render_template('index.html', predicted_value="The customer's churn status is {}.  It can be risky to give  the credit to the customer.".format(x))
+        return render_template('index.html', predicted_value="The customer's churn status is {}.  It can be risky to give  the credit to the customer.".format(jsonify(X)))
     else:
-        
-        return render_template('index.html', predicted_value="The customer's churn status is {}.  It may not be risky to give  the credit to the customer".format(x))
+        return render_template('index.html', predicted_value="The customer's churn status is {}.  It may not be risky to give  the credit to the customer".format(jsonify(X)))
+
+    
 
 
     
