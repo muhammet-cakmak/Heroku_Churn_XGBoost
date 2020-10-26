@@ -51,18 +51,16 @@ def home():
 
 @app.route('/predict', methods=['POST'])
 
-def api_response():
-    from flask import jsonify
-    if request.method == 'POST':
-        return jsonify(**request.json)
 
 def predict():
     
     
-    form_data = request.form.to_dict()
-    print("form_data yazdırılıyor ******************************")
-    print(form_data)
-    df_input = pd.DataFrame.from_records([form_data])
+    int_features = [x for x in request.form.values()]
+    form_data = [np.array(int_features)]
+    
+    #form_data = request.form.to_dict()
+    
+    df_input = pd.DataFrame.from_records(form_data)
     #df_input = df_input.drop(['submitBtn'], axis=1)
     df_input = pd.DataFrame(df_input)
     
@@ -70,26 +68,15 @@ def predict():
     clean_df = clean_data(df_input)
     main_df = sample_df.append(clean_df,sort=False)
     main_df = main_df.fillna(0)
-    print(main_df)
+   
     std_df = main_df.copy()
 
     
     std_df = std_df.astype(float)
-    """
-    std_df = standardize_data(main_df)
-    print("std_df yazdırılıyor ******************************")
-    print(std_df)
-    """
-    print("DATALAR YAZDIRILIYOR *******************************************************")
-    print(type(std_df))
-    print("DATALAR YAZDIRILIYOR *******************************************************")
-    print(std_df)
-    print("DATALAR YAZDIRILIYOR *******************************************************")
+
+    
     clf = pickle.load(open('model.pkl', 'rb'))
     pred = clf.predict(std_df)
-
-    print("pred yazdırılıyor ******************************")
-    print(pred)
     
     #x = round(pred*100, 2)
    
@@ -101,7 +88,16 @@ def predict():
         
         return render_template('index.html', predicted_value="The customer's churn status is {}.  It may not be risky to give  the credit to the customer".format(x))
 
+@app.route('/predict_api',methods=['POST'])
+def predict_api():
+    '''
+    For direct API calls trought request
+    '''
+    data = request.get_json(force=True)
+    prediction = model.predict([np.array(list(data.values()))])
 
+    output = prediction[0]
+    return jsonify(output)
 
     
 
