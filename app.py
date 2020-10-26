@@ -49,7 +49,7 @@ def home():
 
 
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET','POST'])
 
 def predict():
     
