@@ -54,12 +54,14 @@ def home():
 
 def predict():
     
+    int_features = [x for x in request.form.values()]
+    form_data = np.array(int_features)
     
     
     
-    form_data = request.form.to_dict()
+    #form_data = request.form.to_dict()
     
-    df_input = pd.DataFrame.from_records([form_data])
+    df_input = pd.DataFrame.from_records(form_data)
     #df_input = df_input.drop(['submitBtn'], axis=1)
     df_input = pd.DataFrame(df_input)
     
