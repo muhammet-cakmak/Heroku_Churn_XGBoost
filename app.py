@@ -49,9 +49,15 @@ def home():
 
 
 
-@app.route('/predict', methods=['GET','POST'])
+@app.route('/predict', methods=['POST'])
+
+def api_response():
+    from flask import jsonify
+    if request.method == 'POST':
+        return jsonify(**request.json)
 
 def predict():
+    
     
     form_data = request.form.to_dict()
     print("form_data yazdırılıyor ******************************")
